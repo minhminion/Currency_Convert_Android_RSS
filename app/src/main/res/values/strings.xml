@@ -2,8 +2,14 @@
     <string name="app_name">CurrencyConvert</string>
     <string-array name="currencies_array">
         <item>USD</item>
-        <item>Bath</item>
+        <item>GDP</item>
         <item>Euro</item>
+        <item>JPY</item>
+        <item>AUD</item>
+        <item>CAD</item>
         <item>VND</item>
+        <item>CHF</item>
+        <item>CNY</item>
+        <item>HKD</item>
     </string-array>
 </resources>
