@@ -1,115 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_weight="1">
-    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/converterSourceZone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.45">
-        <FrameLayout
+        android:layout_height="wrap_content"
+        android:background="@drawable/coral_gradient">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RelativeLayout
-                android:id="@+id/converterSourceZone"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bananaBoyBrandTextView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/coral_gradient"
-                android:layout_marginBottom="30dp"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Banana Boys"
-                    android:textColor="#ffffff"
-                    android:textSize="16dp"
-                    android:fontFamily="monospace"
-                    android:id="@+id/bananaBoyBrandTextView"
-                    android:textStyle="bold"
-                    android:padding="10dp"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Currency"
-                    android:textColor="#f5f5f5"
-                    android:textSize="38dp"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="serif-monospace"
-                    android:textStyle="bold"
-                    android:layout_below="@+id/bananaBoyBrandTextView"
-                    android:paddingVertical="5dp"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="30dp"
-                    android:paddingLeft="55dp"
-                    android:paddingRight="35dp"
-                    >
-                    <EditText
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".60"
-                        android:hint="10"
-                        android:textSize="60dp"
-                        android:textColorHint="#fff"
-                        />
-                    <Spinner
-                        android:id="@+id/from_currencies_spinner"
-                        android:layout_weight=".40"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-            </RelativeLayout>
-            <Button
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_marginRight="30dp"
-                android:background="@drawable/background_shadow"
-                android:text="⇅"
-                android:textSize="35dp"
-                android:textColor="#333" />
-        </FrameLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.6">
-        <RelativeLayout
-            android:id="@+id/convertDestinationZone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+                android:fontFamily="monospace"
+                android:padding="10dp"
+                android:text="Banana Boys"
+                android:textColor="#ffffff"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif-monospace"
+                android:gravity="center_horizontal"
+                android:paddingVertical="5dp"
+                android:text="Currency"
+                android:textColor="#f5f5f5"
+                android:textSize="38dp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:gravity="center_horizontal"
-                android:paddingLeft="55dp"
-                android:paddingRight="35dp"
-                android:paddingBottom="20dp"
-                >
-                <EditText
-                    android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".60"
-                    android:hint="500.000.000.000.000.000.000.000"
-                    android:textSize="30dp"
-                    android:textColorHint="#ea5455"
-                    />
-                <Spinner
-                    android:id="@+id/to_currencies_spinner"
-                    android:layout_weight=".40"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/from_currency_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="40dp"
+                        android:text="USD"
+                        android:textColor="#FFFF"
+                        />
+                    <TextView
+                        android:id="@+id/from_currency_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="United States Dollar"
+                        android:textColor="#FFFF"
+                        />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:hint="From"
+                    android:textColorHint="#FFFFFF"
+                    app:boxStrokeColor="#FFFFFF"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputCurrency"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="#FFFF"
+                        app:boxStrokeColor="#FFFFFF"
+                        android:textSize="40dp"
+                />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
             </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/selectFromCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#38393939"
+                    android:clipToPadding="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="0dp"
+                    app:cardBackgroundColor="#00FFFFFF"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:alpha="0.2"
+                        android:background="#393939" />
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/convertDestinationZone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/selectToCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#38393939"
+                    android:clipToPadding="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="0dp"
+                    app:cardBackgroundColor="#00FFFFFF"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="30dp"
+                        android:alpha="0.2"
+                        android:background="#393939" />
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:paddingRight="20dp">
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/to_currency_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="40dp"
+                    android:text="USD"
+                    />
+                <TextView
+                    android:id="@+id/to_currency_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="United States Dollar"
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:hint="To"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/resultCurrency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40dp"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/convertButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="#FFFFFF"
+                android:text="Change Currency"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

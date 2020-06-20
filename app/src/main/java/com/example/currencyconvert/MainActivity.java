@@ -1,14 +1,18 @@
 package com.example.currencyconvert;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +21,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -25,75 +34,163 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    Spinner selectFromCurrency;
-    Spinner selectToCurrency;
-    EditText inputCurrency;
-    Button btnChangeCurrency;
-    TextView mResult;
+
     String fromCurrency;
     String toCurrency;
     double currencyRate = 1;
 
+//    Select From Currency
+    List<Currency> currencyList;
+    TextView fromCurrencyName;
+    TextView fromCurrencyCode;
+    TextView toCurrencyName;
+    TextView toCurrencyCode;
+    RecyclerView selectFromCurrency;
+    RecyclerView selectToCurrency;
+
+    TextInputEditText inputCurrency;
+    TextInputEditText resultCurrency;
+
+    Button convertButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ui_version_1);
 
-        selectFromCurrency = (Spinner) findViewById(R.id.from_currencies_spinner);
-        selectToCurrency = (Spinner) findViewById(R.id.to_currencies_spinner);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        inputCurrency = (EditText) findViewById(R.id.inputCurrency) ;
-        btnChangeCurrency = (Button) findViewById(R.id.btnChangeCurrency);
+        // GET ALL COMPONENTS IN VIEW
+        initSetup();
 
-        mResult = (TextView) findViewById(R.id.mResult);
+        // CREATE CURRENCY LIST
+        CreateCurrencyList();
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.currencies_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // ADD CURRENCY LIST TO SELECT & ON SELECT ITEM
+        SetupSelectCurrency();
 
-        // Apply the adapter to the spinner
-        selectFromCurrency.setAdapter(adapter);
-        selectToCurrency.setAdapter(adapter);
-
-        selectFromCurrency.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                fromCurrency = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        selectToCurrency.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                toCurrency = parent.getItemAtPosition(position).toString();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        btnChangeCurrency.setOnClickListener( new View.OnClickListener() {
+        convertButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                new FetchFeedTask().execute((Void) null);
+                if( fromCurrency != toCurrency) {
+                    new FetchFeedTask().execute((Void) null);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Vui lòng chọn tiền tệ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+    }
+
+    private void initSetup () {
+        fromCurrencyName = (TextView) findViewById(R.id.from_currency_name);
+        fromCurrencyCode = (TextView) findViewById(R.id.from_currency_code);
+
+        toCurrencyName = (TextView) findViewById(R.id.to_currency_name);
+        toCurrencyCode = (TextView) findViewById(R.id.to_currency_code);
+
+        inputCurrency = (TextInputEditText) findViewById(R.id.inputCurrency);
+        resultCurrency = (TextInputEditText) findViewById(R.id.resultCurrency);
+
+        convertButton = (Button) findViewById(R.id.convertButton);
+
+
+    }
+
+    private void SetupSelectCurrency () {
+
+//        Default From To Currency
+        Currency defaultCurrency = currencyList.get(0);
+        fromCurrency = defaultCurrency.getCode();
+        fromCurrencyName.setText(defaultCurrency.getName());
+        fromCurrencyCode.setText(defaultCurrency.getCode());
+
+        toCurrency = defaultCurrency.getCode();
+        toCurrencyName.setText(defaultCurrency.getName());
+        toCurrencyCode.setText(defaultCurrency.getCode());
+
+//        Get Select Currency Swipe
+        selectFromCurrency = (RecyclerView) findViewById(R.id.selectFromCurrency);
+        selectToCurrency = (RecyclerView) findViewById(R.id.selectToCurrency);
+
+//        Set Value to Select Currency Swipe
+        selectFromCurrency.setAdapter(new CurrencyAdapter(currencyList));
+        selectToCurrency.setAdapter(new CurrencyAdapter(currencyList));
+
+//        Style Select Currency Swipe
+        Integer padding = (int) ScreenUtils.getScreenWidth(this)/2 - ScreenUtils.dpToPx(this,35);
+        selectFromCurrency.setPadding(padding, 0, padding, 0);
+        selectToCurrency.setPadding(padding, 0, padding, 0);
+
+        // Setting layout manager
+        selectFromCurrency.setLayoutManager(new SliderLayoutManager(this, LinearLayoutManager.HORIZONTAL, false, new SliderLayoutManager.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(Integer layoutPosition) {
+                Currency currency = currencyList.get(layoutPosition);
+//                Show Currency to View
+                fromCurrency = currency.getCode();
+                fromCurrencyName.setText(currency.getName());
+                fromCurrencyCode.setText(currency.getCode());
+                Log.i("From Currency ===>", currency.getName()+" - "+currency.getCode());
+            }
+        }));
+        selectToCurrency.setLayoutManager(new SliderLayoutManager(this, LinearLayoutManager.HORIZONTAL, false, new SliderLayoutManager.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(Integer layoutPosition) {
+                Currency currency = currencyList.get(layoutPosition);
+//                Show Currency to View
+                toCurrency = currency.getCode();
+                toCurrencyName.setText(currency.getName());
+                toCurrencyCode.setText(currency.getCode());
+                Log.i("To Currency ===>", currency.getName()+" - "+currency.getCode());
+            }
+        }));
+    }
+
+    private void CreateCurrencyList () {
+        currencyList = new ArrayList<>();
+        try {
+            JSONArray currencies = new JSONArray(loadJSONFromAsset(getApplicationContext()));
+            for (int i = 0; i < currencies.length(); i++) {
+                JSONObject jsonobject = currencies.getJSONObject(i);
+                String name = jsonobject.getString("name");
+                String code = jsonobject.getString("code");
+                currencyList.add(new Currency(name, code));
+            }
+        } catch (Exception e) {
+            Log.i("Error", e.getMessage());
+        }
+    }
+
+    public String loadJSONFromAsset(Context context) {
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("currency.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
     }
 
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
@@ -106,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected Boolean doInBackground(Void ... voids) {
-//            if("", e);Toast.makeText(gTextUtils.isEmpty(urlLink)){
-//                return false;
-//            }
+            if(urlLink.isEmpty()){
+                return false;
+            }
             try {
                 if(!urlLink.startsWith("http://") &&
                         !urlLink.startsWith("https://"))
@@ -136,8 +233,8 @@ public class MainActivity extends AppCompatActivity {
 
             if(success) {
                 Double currency = Double.parseDouble(inputCurrency.getText().toString());
-                Double result = currency*currencyRate;
-                Log.i("Result", result.toString());
+                int result = (int)(currency*currencyRate);
+                resultCurrency.setText(String.format(Locale.ENGLISH, "%,d" , result));
             } else {
                 Toast.makeText(MainActivity.this,
                         "Enter a valid Rss feed url",
