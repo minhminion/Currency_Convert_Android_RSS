@@ -121,8 +121,18 @@ public class MainActivity extends AppCompatActivity {
         selectToCurrency = (RecyclerView) findViewById(R.id.selectToCurrency);
 
 //        Set Value to Select Currency Swipe
-        selectFromCurrency.setAdapter(new CurrencyAdapter(currencyList));
-        selectToCurrency.setAdapter(new CurrencyAdapter(currencyList));
+        selectFromCurrency.setAdapter(new CurrencyAdapter(currencyList, new CurrencyAdapter.Callback() {
+            @Override
+            public void onItemClick(View v) {
+                selectFromCurrency.smoothScrollToPosition(selectFromCurrency.getChildLayoutPosition(v));
+            }
+        }));
+        selectToCurrency.setAdapter(new CurrencyAdapter(currencyList, new CurrencyAdapter.Callback() {
+            @Override
+            public void onItemClick(View v) {
+                selectToCurrency.smoothScrollToPosition(selectToCurrency.getChildLayoutPosition(v));
+            }
+        }));
 
 //        Style Select Currency Swipe
         Integer padding = (int) ScreenUtils.getScreenWidth(this)/2 - ScreenUtils.dpToPx(this,35);
