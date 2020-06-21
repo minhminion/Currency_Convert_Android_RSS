@@ -2,44 +2,31 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_weight="0.45"
         android:id="@+id/converterSourceZone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/coral_gradient">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
             <TextView
                 android:id="@+id/bananaBoyBrandTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
                 android:padding="10dp"
-                android:text="Banana Boys"
+                android:text="Curency Converter"
                 android:textColor="#ffffff"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="serif-monospace"
-                android:gravity="center_horizontal"
-                android:paddingVertical="5dp"
-                android:text="Currency"
-                android:textColor="#f5f5f5"
-                android:textSize="38dp"
-                android:textStyle="bold" />
 
             <LinearLayout
+                android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -97,6 +84,7 @@
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -133,20 +121,13 @@
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
-
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_weight="0.55"
         android:id="@+id/convertDestinationZone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -183,18 +164,18 @@
                         android:background="#393939" />
                 </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:paddingLeft="20dp"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
-            android:paddingRight="20dp">
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingRight="20dp">
 
             <LinearLayout
                 android:layout_width="150dp"
@@ -234,7 +215,9 @@
 
             </LinearLayout>
 
+
             <Button
+                android:layout_alignParentBottom="true"
                 android:id="@+id/convertButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -242,8 +225,6 @@
                 android:textColor="#FFFFFF"
                 android:text="Change Currency"
                 />
-        </LinearLayout>
-
     </RelativeLayout>
 
 </LinearLayout>
