@@ -63,7 +63,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:hint="From"
                     android:textColorHint="#FFFFFF"
@@ -73,7 +73,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputCurrency"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:textColor="#FFFF"
                         app:boxStrokeColor="#FFFFFF"
                         android:textSize="40dp"

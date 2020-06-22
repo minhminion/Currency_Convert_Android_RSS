@@ -1,16 +1,23 @@
 package com.example.currencyconvert;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
+import android.icu.text.DecimalFormat;
+import android.icu.text.NumberFormat;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Xml;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -86,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void initSetup () {
@@ -97,10 +103,35 @@ public class MainActivity extends AppCompatActivity {
         toCurrencyCode = (TextView) findViewById(R.id.to_currency_code);
 
         inputCurrency = (TextInputEditText) findViewById(R.id.inputCurrency);
+        inputCurrency.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                switch ((int)(s.length()/5)) {
+                    case 1:
+                        inputCurrency.setTextSize(30f);
+                        break;
+                    case 2:
+                        inputCurrency.setTextSize(20f);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         resultCurrency = (TextInputEditText) findViewById(R.id.resultCurrency);
+        resultCurrency.setEnabled(false);
 
         convertButton = (Button) findViewById(R.id.convertButton);
-
 
     }
 
@@ -237,14 +268,25 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         protected  void onPostExecute (Boolean success) {
 //            mSwipeLayout.setRefreshing(false);
 
             if(success) {
                 Double currency = Double.parseDouble(inputCurrency.getText().toString());
-                int result = (int)(currency*currencyRate);
-                resultCurrency.setText(String.format(Locale.ENGLISH, "%,d" , result));
+                double result = (currency*currencyRate);
+                switch ((int)(String.valueOf(result).length()/5)) {
+                    case 1:
+                        resultCurrency.setTextSize(30f);
+                        break;
+                    case 2:
+                        resultCurrency.setTextSize(20f);
+                        break;
+                    default:
+                        break;
+                }
+                resultCurrency.setText(String.format(Locale.ENGLISH, "%,f" , result));
             } else {
                 Toast.makeText(MainActivity.this,
                         "Enter a valid Rss feed url",
