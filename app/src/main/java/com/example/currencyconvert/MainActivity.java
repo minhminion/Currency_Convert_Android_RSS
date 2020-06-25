@@ -275,8 +275,9 @@ public class MainActivity extends AppCompatActivity {
 
             if(success) {
                 Double currency = Double.parseDouble(inputCurrency.getText().toString());
-                double result = (currency*currencyRate);
-                switch ((int)(String.valueOf(result).length()/5)) {
+                DecimalFormat df = new DecimalFormat("###,###.###");
+                String result = df.format(currency*currencyRate);
+                switch ((int)(result.length()/5)) {
                     case 1:
                         resultCurrency.setTextSize(30f);
                         break;
@@ -286,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                resultCurrency.setText(String.format(Locale.ENGLISH, "%,f" , result));
+                resultCurrency.setText(result);
             } else {
                 Toast.makeText(MainActivity.this,
                         "Enter a valid Rss feed url",
